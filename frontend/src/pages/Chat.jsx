@@ -77,8 +77,7 @@ export default function Chat() {
   const RoomList = () => (
     <div className="flex h-full flex-col">
       <div className="flex items-center gap-2 border-b border-line p-4">
-        <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand text-white"><MessageSquare size={18} /></span>
-        <span className="font-bold text-white">Ripple</span>
+        <img src="/logo.png" alt="Ripple Chat" className="h-8 w-auto rounded-md bg-white/95 px-2 py-1" />
         <span className={`ml-auto flex items-center gap-1 text-[11px] ${connected ? 'text-emerald-400' : 'text-slate-500'}`}>
           <Circle size={8} className="fill-current" /> {connected ? 'online' : 'connecting'}
         </span>
