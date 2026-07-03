@@ -1,56 +1,67 @@
-# Ripple — Real-Time Chat 💬
+# Ripple Chat
 
-[![MERN](https://img.shields.io/badge/Stack-MERN-brightgreen)](#)
-[![Socket.io](https://img.shields.io/badge/Realtime-Socket.io-black)](#)
+A real-time group chat application powered by Socket.io over the MERN stack — channels, live messaging, online presence, and typing indicators, behind JWT-authenticated connections.
 
-A real-time group chat app: multiple channels, live messages, **online presence**, and
-**typing indicators** — powered by Socket.io over the MERN stack.
+**Live demo:** [ripple-chat-app.vercel.app](https://ripple-chat-app.vercel.app)
 
-> Built by **Amar Hassen Mohammednur**.
+## Overview
 
-## ✨ Features
+- **Real-time messaging** — messages broadcast instantly over WebSockets
+- **Channels** — topic-based rooms with per-room message history (last 50, persisted in MongoDB)
+- **Presence** — live roster of who is online in each room
+- **Typing indicators** — see when other members are composing
+- **Authenticated sockets** — every WebSocket connection is verified with a signed JWT before joining
+- **System events** — join/leave notices and per-user avatar colors
 
-- **Real-time messaging** with Socket.io (no refresh)
-- **Channels/rooms** — General, Tech Talk, Random, Introductions
-- **Online presence** — see who's in a room, live
-- **Typing indicators** — "X is typing…"
-- **JWT-authenticated** sockets (only logged-in users connect)
-- **Message history** persisted in MongoDB (last 50 per room)
-- Per-user avatar colors, join/leave system messages
-- Dark, **mobile-responsive** UI with a slide-out channel drawer
+## Architecture
 
-## 🧱 Tech Stack
-
-React 18 · Vite · Tailwind CSS · socket.io-client · Node.js · Express · Socket.io · Mongoose · MongoDB · JWT
-
-## 🚀 Getting Started
-
-### Backend
-```bash
-cd backend && npm install
-cp .env.example .env      # set MONGODB_URI + JWT_SECRET
-npm run seed              # 3 users, 4 rooms, sample messages
-npm run dev               # http://localhost:5004
+```
+realtime-chat/
+├── backend/          Express + Socket.io server
+│   ├── models/       User, Room, Message
+│   ├── routes/       /api/auth · /api/rooms (REST history)
+│   └── socket.js     Authenticated WebSocket gateway:
+│                     join / message / typing / presence
+└── frontend/         React client (Vite)
+    └── src/
+        └── pages/    Login, Register, Chat (socket lifecycle)
 ```
 
-### Frontend
+The backend requires a persistent host for WebSocket connections; the REST API and client are platform-agnostic.
+
+## Tech Stack
+
+| Layer      | Technology                                       |
+| ---------- | ------------------------------------------------ |
+| Frontend   | React 18, Vite, Tailwind CSS, socket.io-client   |
+| Backend    | Node.js, Express, Socket.io, Mongoose            |
+| Database   | MongoDB Atlas                                    |
+| Security   | Helmet, rate limiting, input sanitization, JWT   |
+
+## Getting Started
+
+**Prerequisites:** Node.js 18+ and a MongoDB connection string.
+
 ```bash
-cd frontend && npm install
-npm run dev               # http://localhost:5173
+# Server
+cd backend
+npm install
+cp .env.example .env   # configure environment
+npm run seed           # optional: create sample rooms and history
+npm run dev
+
+# Client
+cd frontend
+npm install
+npm run dev
 ```
 
-**Try it live:** log in as `amar@chat.io` / `demo123` in one browser and
-`selam@chat.io` / `demo123` in another — watch messages and typing sync instantly.
+Environment variables are documented in [`backend/.env.example`](backend/.env.example) and [`frontend/.env.example`](frontend/.env.example).
 
-## ☁️ Deployment
+## Author
 
-> ⚠️ **Websockets need a persistent server** — Vercel's serverless functions can't hold
-> a socket connection open. Deploy the **backend to Render or Railway** (free tiers work),
-> and the **frontend to Vercel**.
+**Amar Hassen Mohammednur** — [github.com/Min-joona](https://github.com/Min-joona)
 
-1. **Backend** → Render/Railway web service. Env: `MONGODB_URI`, `JWT_SECRET`,
-   `ALLOWED_ORIGINS` (your frontend URL). Run `npm run seed` once.
-2. **Frontend** → Vercel. Env: `VITE_API_URL` and `VITE_SOCKET_URL` = your backend URL.
+## License
 
-## 📄 License
 MIT
